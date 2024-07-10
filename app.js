@@ -7,14 +7,11 @@ const express = require("express");
 const app = express();
 const port = 8080;
 const mongoose = require("mongoose");
-// const Lsisting = require("./models/listing");
 const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
-// const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
-// const { listingSchema, reviewSchema } = require("./schema.js");
-// const Review = require("./models/review.js");
+
 const listingRouter = require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
@@ -72,16 +69,6 @@ const sessionOptions = {
   },
 };
 
-//demo
-// app.get("/demouser", async (req, res) => {
-//   let fakeUser = new User({
-//     email: "student@gmail.com",
-//     username: "motilal",
-//   });
-//   let newuser = await User.register(fakeUser, "helloworld");
-//   res.send(newuser);
-// });
-
 app.use(session(sessionOptions));
 app.use(flash());
 app.use(passport.initialize());
@@ -113,7 +100,6 @@ app.all("*", (req, res, next) => {
 app.use((err, req, res, next) => {
   let { status = 500, message = "something went wrong!" } = err;
   res.render("./listings/error.ejs", { message });
-  // res.status(status).send(message);
 });
 
 //port starter

@@ -19,6 +19,9 @@ const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
+const Booking = require("./models/booking.js");
+const Listing = require("./models/listing.js");
+// const booking = require("./models/booking.js");
 const dburl = process.env.ATLASTDB_URL;
 
 main()
@@ -35,7 +38,7 @@ async function main() {
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
-app.use(express.urlencoded({ extented: true }));
+app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "/public")));
@@ -86,6 +89,7 @@ app.use((req, res, next) => {
 //for reconstructing routes
 app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewRouter);
+// app.use("/listings/:id/booking", reviewRouter);
 app.use("/", userRouter);
 //wrong request
 app.all("*", (req, res, next) => {
@@ -97,6 +101,20 @@ app.use((err, req, res, next) => {
   let { status = 500, message = "something went wrong!" } = err;
   res.render("./listings/error.ejs", { message });
 });
+
+//booking route
+
+// post route
+// app.post("/listings/:id/newBookingcreate", async (req, res) => {
+//   let listing = await Listing.findById(req.params.id);
+//   let newBooking = new Booking(req.body.booking);
+//   listing.booking.push(newBooking);
+
+//   await newBooking.save();
+//   await listing.save();
+//   console.log("new booking accepted");
+//   res.send("success");
+// });
 
 //port starter
 app.listen(port, (req, res) => {

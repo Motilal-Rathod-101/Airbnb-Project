@@ -2,10 +2,11 @@ const Listing = require("../models/listing");
 const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
 const mapToken = process.env.MAP_TOKEN;
 const geocodingClient = mbxGeocoding({ accessToken: mapToken });
-
+const Booking = require("../models/booking.js");
 //index
 module.exports.index = async (req, res) => {
   const allListings = await Listing.find({});
+  // console.log(allListings);
   res.render("./listings/index.ejs", { allListings });
 };
 
@@ -34,6 +35,7 @@ module.exports.showListing = async (req, res) => {
 
 //create
 module.exports.createListing = async (req, res, next) => {
+  // console.log(req.body);
   let response = await geocodingClient
     .forwardGeocode({
       query: req.body.listing.location,
@@ -56,7 +58,10 @@ module.exports.createListing = async (req, res, next) => {
 
 //edit
 module.exports.renderEditform = async (req, res) => {
+  console.log(req.body);
+
   let { id } = req.params;
+  // const listing = await Listing.findById(id);
   const listing = await Listing.findById(id);
   if (!listing) {
     req.flash("error", "Listing you requested for does not exist!");
@@ -92,4 +97,36 @@ module.exports.destroyListing = async (req, res) => {
   req.flash("success", "Listing Deleted!");
 
   res.redirect("/listings");
+};
+// Render Booking Form
+module.exports.renderBookingForm = async (req, res) => {
+  let listing = await Listing.findById(req.params.id);
+  res.render("./listings/newBooking.ejs", { listing });
+};
+
+// Save Booking
+module.exports.savedBooking = async (req, res) => {
+  let listing = await Listing.findById(req.params.id).populate("bookings");
+  console.log(listing.bookings);
+  let newBooking = new Booking(req.body.bookings);
+  listing.bookings.push(newBooking);
+
+  await newBooking.save();
+  await listing.save();
+
+  res.redirect(`/listings/${listing._id}`);
+};
+
+module.exports.deleteBooking = async (req, res) => {
+  let { id, bookingId } = req.params;
+  await Listing.findByIdAndUpdate(id, { $pull: { bookings: bookingId } });
+  await Booking.findByIdAndDelete(bookingId);
+  res.redirect(`/listings/${id}`);
+};
+
+module.exports.trendings = async (req, res) => {
+  // let [trending] = await Listing.find({ country: "United States" });
+  // console.log(trending);
+  // res.send("hello");a
+  console.log("hellow");
 };

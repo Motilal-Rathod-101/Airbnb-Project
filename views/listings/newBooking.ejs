@@ -1,0 +1,83 @@
+<% layout("/layouts/boilerplate") %>
+<body>
+  <div class="row mt-3">
+    <h3 class="col-8 offset-2">Create ur booking here</h3>
+
+    <div class="col-8 offset-2">
+      <form
+        action="/listings/<%= listing.id%>/newBooking"
+        method="POST"
+        class="needs-validation"
+        enctype="multipart/form-data"
+        novalidate
+      >
+        <div class="mb-3">
+          <label for="fullName" class="form-label">Full Name</label>
+          <input
+            id="fullName"
+            name="booking[fullName]"
+            type="text"
+            placeholder="Enter your name"
+            class="form-control"
+            required
+          />
+          <div class="valid-feedback">FullName looks good</div>
+          <div class="invalid-feedback">Please enter a FullName</div>
+        </div>
+        <div class="mb-3">
+          <label for="email" class="form-label">Email </label>
+          <input
+            id="email"
+            name="booking[email]"
+            type="text"
+            placeholder="Enter your email"
+            class="form-control"
+            required
+          />
+          <div class="valid-feedback">Email looks good</div>
+          <div class="invalid-feedback">Please enter a email</div>
+        </div>
+        <div class="row">
+          <div class="mb-3 col-md-4">
+            <label for="age" class="form-label">Age</label>
+            <input
+              id="age"
+              name="booking[age]"
+              type="text"
+              placeholder="Enter your age"
+              class="form-control"
+              required
+            />
+            <div class="invalid-feedback">age must be valid</div>
+          </div>
+          <div class="mb-3 col-md-8">
+            <label for="mobile" class="form-label">Mobile No:</label>
+            <input
+              id="mobile"
+              name="booking[mobile]"
+              type="text"
+              placeholder="Mobile number"
+              class="form-control"
+              required
+            />
+            <div class="invalid-feedback">Mobile no. must be valid</div>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="aadhar" class="form-label">Aadhar/Pan details </label>
+          <input
+            name="booking[aadhar]"
+            type="text"
+            placeholder=""
+            class="form-control"
+            id="aadhar"
+            required
+          />
+          <div class="invalid-feedback">Aadhar/Pan details must be valid</div>
+        </div>
+        <button class="btn btn-outline-danger mt-3">Submit</button>
+        <br />
+      </form>
+    </div>
+  </div>
+</body>

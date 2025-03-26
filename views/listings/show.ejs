@@ -3,12 +3,12 @@
   const mapToken = "<%= process.env.MAP_TOKEN %>";
   const listing = <%- JSON.stringify(listing) %>;
 </script>
-<body>
-  <div class="row">
+<body id="show-container">
+  <div class="row show-body">
     <div class="col-8 offset-3">
-      <h3><%= listing.title %></h3>
+      <h3 style="font-weight: 600; line-height: 4rem"><%= listing.title %></h3>
     </div>
-    <div class="card col-6 offset-3 show-card listing-card">
+    <div class="card col-6 offset-3 show-card listing-card2">
       <img
         src="<%= listing.image.url %>"
         class="card-img-top show-img"
@@ -16,7 +16,7 @@
       />
       <div class="card-body">
         <p class="card-text">
-          Owened By <i><b><%= listing.owner.username %></b></i>
+          Owened By <i><b><%= listing.owner?.username || 'Unknown' %></b></i>
         </p>
         <p class="card-text"><%= listing.description %></p>
         <p class="card-text">
@@ -26,18 +26,28 @@
         <p class="card-text"><%= listing.country %></p>
       </div>
     </div>
-    <% if (currentUser && listing.owner._id.equals(currentUser._id)) { %>
+    <% if (currentUser && listing.owner && listing.owner._id &&
+    listing.owner._id.equals(currentUser._id)) { %>
+
     <div class="btns">
       <a
         href="/listings/<%= listing._id %>/edit"
         class="btn btn-danger col-1 offset-3"
         >edit</a
       >
+
       <form method="POST" action="/listings/<%= listing._id %>/?_method=DELETE">
-        <button class="btn btn-danger offset-5">Delete</button>
+        <button class="btn btn-danger offset-6">Delete</button>
       </form>
     </div>
     <% } %>
+    <div class="btns">
+      <a
+        href="/listings/<%= listing._id %>/newBookingCreate"
+        class="btn btn-danger col-1.2 offset-3 mt-2"
+        >Book Now
+      </a>
+    </div>
 
     <div class="col-8 offset-3 mb-3">
       <hr />
@@ -144,9 +154,27 @@
       </div>
       <% } %>
     </div>
-    <div class=".col-8 offset-3 mb-3">
-      <h3>Where you'll be</h3>
-      <div id="map"></div>
+    <div class="row-1">
+      <div class=".col-8 offset-3 mb-3">
+        <h3>Where you'll be</h3>
+        <div id="map"></div>
+      </div>
+    </div>
+    <br /><br />
+    <div class="row-1">
+      <h4>All Booking Lists</h4>
+      <ul>
+        <% if (listing && listing.bookings) { %> <% for(let booking of
+        listing.bookings) { %>
+        <p><%= booking %></p>
+        <form
+          method="POST"
+          action="/listings/<%= listing._id %>/bookings/<%= booking._id %>?_method=DELETE"
+        >
+          <button class="btn btn-sm btn-dark">Delete</button>
+        </form>
+        <% } %> <% }%>
+      </ul>
     </div>
   </div>
   <script src="/js/map.js"></script>

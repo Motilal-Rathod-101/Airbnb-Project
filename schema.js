@@ -26,5 +26,5 @@ module.exports.bookingSchema = Joi.object({
     age: Joi.number().required(),
     mobile: Joi.string().required().min(10).max(12), // mobile numbers are typically stored as strings
     aadhar: Joi.string().required(),
-  }).required(), // Added the missing parentheses here
+  }), // Added the missing parentheses here
 });
